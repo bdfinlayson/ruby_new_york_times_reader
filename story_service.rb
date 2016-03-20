@@ -9,13 +9,21 @@ module StoryService
   end
 
   def get_stories_list_from(category)
-    page = Nokogiri::HTML(open("http://www.nytimes.com/pages/#{category}/index.html"))
+    begin
+      page_links = Nokogiri::HTML(open("http://www.nytimes.com/pages/#{category}/index.html"))
+      filter_stories_from page_links
+    rescue
+      puts "Sorry, there was an error retrieving information for that category."
+      restart
+    end
+  end
+
+  def filter_stories_from(page_links)
+    puts "Finding story links..."
 
     goodlinks = Array.new
 
-    puts "Finding story links..."
-
-    page.css('a').each do |a|
+    page_links.css('a').each do |a|
       begin
         raise if a.attributes["href"].nil?
         link = a.attributes["href"].value
@@ -29,9 +37,8 @@ module StoryService
         # "Skipping link..."
       end
     end
-    goodlinks.uniq!
-    puts "Found #{goodlinks.count} stories to read!"
-    goodlinks
+    puts "Found #{goodlinks.uniq!.count} stories to read!"
+    goodlinks.shuffle!
   end
 
   def remove_story_from_list
