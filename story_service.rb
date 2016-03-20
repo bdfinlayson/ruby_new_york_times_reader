@@ -1,7 +1,10 @@
 require_relative 'bad_links'
+require_relative 'directions'
 
 module StoryService
   include BadLinks
+  include Directions
+
   attr_accessor :stories_list, :current_story
 
   def initialize
@@ -13,7 +16,7 @@ module StoryService
       page_links = Nokogiri::HTML(open("http://www.nytimes.com/pages/#{category}/index.html"))
       filter_stories_from page_links
     rescue
-      puts "Sorry, there was an error retrieving information for that category."
+      puts error_retriving_category
       restart
     end
   end

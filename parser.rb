@@ -7,16 +7,22 @@ module Parser
     raise if not valid? input
   end
 
+  def yes?
+    yes_or_no? gets.chomp
+  end
+
+  private
+
   def yes_or_no?(input)
     match? "yes", input
   end
 
-  private
 
   def valid?(input)
     CATEGORIES.split.each do |category|
       return category if match? category, input
     end
+    raise
   end
 
   def match?(obj, input)

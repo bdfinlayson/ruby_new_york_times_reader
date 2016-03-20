@@ -26,7 +26,7 @@ class Application
       @stories_list = get_stories_list_from desired_category
       continue
     rescue
-      puts "Sorry, that is an invalid category. Please try again."
+      puts invalid_category
       retry
     end
   end
