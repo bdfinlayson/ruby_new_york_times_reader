@@ -5,3 +5,5 @@ To use:
 
 - gem install nokogiri, mechanize, and pry
 - run `ruby news_reader`
+- enter the category you wish to hear a story from (politics, world, technology, etc...)
+- follow the prompts to listen to a story from that category or select another
