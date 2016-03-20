@@ -40,23 +40,28 @@ module StoryService
   end
 
   def get_story
-    @current_story = @stories_list.sample
-    puts "Here is your random story! #{@current_story}"
-    puts "Scraping content now..."
-    agent = Mechanize.new { |a| a.user_agent_alias = "Mac Safari" }
+    begin
+      @current_story = @stories_list.sample
+      puts "Here is your random story! #{@current_story}"
+      puts "Scraping content now..."
+      agent = Mechanize.new { |a| a.user_agent_alias = "Mac Safari" }
 
-    agent.get(@current_story) do |p|
-      headline = p.search("#headline")
-      date_published  = p.search("time[itemprop='datePublished']").children.text
-      story = p.search(".story-body-text")
-      open("random_story.txt", 'w') do |f|
-        f << headline.children.text + "\n"
-        f << "Published on #{date_published} \n"
-        f << " ... \n"
-        story.each do |story_body|
-          f << story_body.children.text + "\n"
+      agent.get(@current_story) do |p|
+        headline = p.search("#headline")
+        date_published  = p.search("time[itemprop='datePublished']").children.text.split(',').first
+        story = p.search(".story-body-text")
+        open("random_story.txt", 'w') do |f|
+          f << headline.children.text + "\n"
+          f << "Published on #{date_published} \n"
+          f << " ... \n"
+          story.each do |story_body|
+            f << story_body.children.text + "\n"
+          end
         end
       end
+    rescue
+      puts "Sorry, there was a problem retrieving your story..."
+      read_another?
     end
   end
 end

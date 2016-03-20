@@ -34,6 +34,7 @@ module Directions
         restart
       else
         puts "Okay! Thanks for listening!"
+        abort
       end
     end
   end
