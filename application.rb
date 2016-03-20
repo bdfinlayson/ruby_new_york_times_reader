@@ -6,10 +6,12 @@ require 'pry'
 
 require_relative 'directions'
 require_relative 'story_service'
+require_relative 'parser'
 
 class Application
   include Directions
   include StoryService
+  include Parser
 
   attr_accessor :stories_list
 
@@ -18,8 +20,15 @@ class Application
   end
 
   def restart
-    @stories_list = get_stories_list_from usr_select_category
-    continue
+    begin
+      input = usr_select_category
+      desired_category = parse input
+      @stories_list = get_stories_list_from desired_category
+      continue
+    rescue
+      puts "Sorry, that is an invalid category. Please try again."
+      retry
+    end
   end
 
   private
