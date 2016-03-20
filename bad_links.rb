@@ -27,7 +27,8 @@ module BadLinks
     'privacy-policy',
     'times-journeys',
     'couch/feed',
-    'index.html'
+    'index.html',
+    'lens.blogs.nytimes.com'
   ]
 end
 
