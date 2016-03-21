@@ -46,6 +46,7 @@ module BadLinks
     'twitter',
     'video',
     'www.legacy.com',
+    'nytstore'
   ]
 end
 
