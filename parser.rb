@@ -5,6 +5,7 @@ module Parser
 
   def parse(input)
     raise if not valid? input
+    valid? input
   end
 
   def yes?

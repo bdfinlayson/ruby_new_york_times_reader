@@ -46,7 +46,12 @@ module BadLinks
     'twitter',
     'video',
     'www.legacy.com',
-    'nytstore'
+    'nytstore',
+    'sports',
+    'golf',
+    'curlers',
+    'jobmarket',
+    'employercentral'
   ]
 end
 

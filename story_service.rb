@@ -14,14 +14,14 @@ module StoryService
   def get_stories_list_from(category)
     begin
       page_links = Nokogiri::HTML(open("http://www.nytimes.com/pages/#{category}/index.html"))
-      filter_stories_from page_links
+      filter_stories_from page_links, category
     rescue
       puts error_retriving_category
       restart
     end
   end
 
-  def filter_stories_from(page_links)
+  def filter_stories_from(page_links, category)
     puts "Finding story links..."
 
     goodlinks = Array.new
@@ -34,6 +34,7 @@ module StoryService
         raise if link.length > 150
         BADLINKS.each do |bl|
           raise if link.include? bl
+          raise if !link.include? category
         end
         goodlinks.push link
       rescue
