@@ -51,7 +51,8 @@ module BadLinks
     'golf',
     'curlers',
     'jobmarket',
-    'employercentral'
+    'employercentral',
+    'opinionator'
   ]
 end
 
