@@ -52,7 +52,8 @@ module BadLinks
     'curlers',
     'jobmarket',
     'employercentral',
-    'opinionator'
+    'opinionator',
+    'first-draft'
   ]
 end
 
