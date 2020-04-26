@@ -79,7 +79,6 @@ module StoryService
         open("random_story.txt", 'w') do |f|
           f << headline + "\n"
           f << "Published on #{date_published} \n"
-          f << " ... \n"
           articleBody.children.each do |el|
             text = el.text
             if text.length < 600 # to filter css / js content

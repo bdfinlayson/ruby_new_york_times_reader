@@ -15,21 +15,17 @@ class Reader < Application
         end
         f.each_line do |line|
           count += 1
-          if count == 3
-            puts want_to_listen?
-            raise if not yes?
-          else
-            puts line
-            `say #{line}`
-          end
+          puts line
+          `say -v Samantha #{line}`
         end
       end
-    rescue
+    rescue SystemExit, Interrupt
       read_another?
     end
   end
 
   def read_another?
+    puts "\n"
     puts hear_another?
     if yes?
       remove_story_from_list
