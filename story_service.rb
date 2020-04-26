@@ -1,11 +1,12 @@
 require_relative 'bad_links'
 require_relative 'directions'
+require 'byebug'
 
 module StoryService
   include BadLinks
   include Directions
 
-  attr_accessor :stories_list, :current_story
+  attr_accessor :stories_list, :current_story, :selected_story
 
   def initialize
     @current_story
@@ -50,23 +51,42 @@ module StoryService
     puts "You have #{@stories_list.count} stories remaining..."
   end
 
+  def list_stories
+    @stories_list.each_with_index do |story, index|
+      parts = story.split("/").last(2)
+      region = parts[0]
+      description = parts[1]
+      puts "\t" + index.to_s + " -- " + region.upcase + ' -- ' + description.gsub(".html", '').gsub("-", ' ').capitalize
+    end
+
+    puts "\n" + "Which story would you like to hear?"
+
+    @selected_story = gets.chomp
+  end
+
   def get_story
     begin
-      @current_story = @stories_list.sample
-      puts "Here is your random story! #{@current_story}"
+      @current_story = @stories_list[@selected_story.to_i]
+
       puts "Scraping content now..."
+
       agent = Mechanize.new { |a| a.user_agent_alias = "Mac Safari" }
 
-      agent.get(@current_story) do |p|
-        headline = p.search("#headline")
-        date_published  = p.search("time[itemprop='datePublished']").children.text.split(',').first
-        story = p.search(".story-body-text")
+      agent.get("https://nytimes.com" + @current_story) do |story|
+        headline = story.search("h1[itemprop='headline']").text
+        date_published  = story.search("time").first.text
+        articleBody = story.search("section[name='articleBody']")
         open("random_story.txt", 'w') do |f|
-          f << headline.children.text + "\n"
+          f << headline + "\n"
           f << "Published on #{date_published} \n"
           f << " ... \n"
-          story.each do |story_body|
-            f << story_body.children.text + "\n"
+          articleBody.children.each do |el|
+            text = el.text
+            if text.length < 600 # to filter css / js content
+              text.split(". ").each do |t|
+                f << t.strip + "\n"
+              end
+            end
           end
         end
       end

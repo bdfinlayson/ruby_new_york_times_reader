@@ -34,6 +34,7 @@ class Application
   private
 
   def continue
+    list_stories
     get_story
     read_story
     read_another?

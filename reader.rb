@@ -1,4 +1,5 @@
 require_relative "directions"
+require_relative "application"
 
 class Reader < Application
   include Directions
